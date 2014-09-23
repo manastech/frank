@@ -26,10 +26,12 @@ class Frank::Handler < HTTP::Handler
         begin
           body = route.handler.call(context).to_s
           content_type = context.response?.try(&.content_type) || "text/plain"
-          return HTTP::Response.new(200, body)
+          return HTTP::Response.ok(content_type, body)
         rescue ex
-          return HTTP::Response.new(500, "Internal Server Error", {"Content-Type" => "text/plain"}, ex.to_s)
+          return HTTP::Response.error("text/plain", "Internal Server Error:\n #{ex.to_s}")
         end
+      else
+        return HTTP::Response.not_found
       end
     end
     nil
