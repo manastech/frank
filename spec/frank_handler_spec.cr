@@ -21,6 +21,16 @@ describe "Frank::Handler" do
     response.body.should eq("hello world")
   end
 
+  it "routes request with post data (body)" do
+    frank = Frank::Handler.new
+    frank.add_route "POST", "/" do |ctx|
+      "hello #{ctx.params["message"]}"
+    end
+    request = HTTP::Request.new("POST", "/", body: "message=world")
+    response = frank.call(request)
+    response.body.should eq("hello world")
+  end
+
   it "route parameter has more precedence than query string arguments" do
     frank = Frank::Handler.new
     frank.add_route "GET", "/:message" do |ctx|

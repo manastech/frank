@@ -19,11 +19,12 @@ class Frank::Handler < HTTP::Handler
 
   def exec_request(request)
     uri = request.uri
+    body = request.body.to_s
     components = uri.path.not_nil!.split "/"
     @routes.each do |route|
       params = route.match(request.method, components)
       if params
-        if query = uri.query
+        if (query = uri.query) || ((query = body) && !body.empty?)
           CGI.parse(query) do |key, value|
             params[key] ||= value
           end
