@@ -14,8 +14,8 @@ describe "Route" do
 
     it "matches" do
       route = Route.new("GET", "/foo/:one/path/:two") { "" }
-      params = route.match("GET", "/foo/uno/path/dos".split("/"))
-      params.should eq({"one" => "uno", "two" => "dos"})
+      route_components = route.match("GET", "/foo/uno/path/dos".split("/"))
+      route_components.should eq(["", "foo", ":one", "path", ":two"])
     end
   end
 end

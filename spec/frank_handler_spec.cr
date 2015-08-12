@@ -11,26 +11,6 @@ describe "Frank::Handler" do
     response.body.should eq("hello")
   end
 
-  it "routes request with query string" do
-    frank = Frank::Handler.new
-    frank.add_route "GET", "/" do |ctx|
-      "hello #{ctx.params["message"]}"
-    end
-    request = HTTP::Request.new("GET", "/?message=world")
-    response = frank.call(request)
-    response.body.should eq("hello world")
-  end
-
-  it "route parameter has more precedence than query string arguments" do
-    frank = Frank::Handler.new
-    frank.add_route "GET", "/:message" do |ctx|
-      "hello #{ctx.params["message"]}"
-    end
-    request = HTTP::Request.new("GET", "/world?message=coco")
-    response = frank.call(request)
-    response.body.should eq("hello world")
-  end
-
   it "sets content type" do
     frank = Frank::Handler.new
     frank.add_route "GET", "/" do |env|

@@ -1,7 +1,7 @@
 class Frank::Route
   getter handler
 
-  def initialize(@method, path, &@handler : Frank::Context -> _)
+  def initialize(@method, @path, &@handler : Frank::Context -> _)
     @components = path.split "/"
   end
 
@@ -9,18 +9,11 @@ class Frank::Route
     return nil unless method == @method
     return nil unless components.length == @components.length
 
-    params = nil
-
     @components.zip(components) do |route_component, req_component|
-      if route_component.starts_with? ':'
-        params ||= {} of String => String
-        params[route_component[1 .. -1]] = req_component
-      else
-        return nil unless route_component == req_component
-      end
+      return nil if (route_component != req_component) &&
+                      (!route_component.starts_with? ':')
     end
 
-    params ||= {} of String => String
-    params
+    return @components
   end
 end

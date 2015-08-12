@@ -4,5 +4,5 @@ This is a proof-of-concept [Sinatra](http://www.sinatrarb.com/) clone for [Cryst
 
 ## Status
 
-Basic `get`, `put`, `post` and `head` routes can be matched, and request parameters can be obtained.
+Basic `get`, `put`, `post`, `patch` and `delete` routes can be matched, and request parameters can be obtained.
 We are still missing a lot!
