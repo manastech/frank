@@ -1,5 +1,5 @@
 require "http/server"
-require "cgi"
+require "http/params"
 
 class Frank::Handler < HTTP::Handler
   INSTANCE = new
@@ -18,13 +18,12 @@ class Frank::Handler < HTTP::Handler
   end
 
   def exec_request(request)
-    uri = request.uri
-    components = uri.path.not_nil!.split "/"
+    components = request.path.not_nil!.split "/"
     @routes.each do |route|
       params = route.match(request.method, components)
       if params
-        if query = uri.query
-          CGI.parse(query) do |key, value|
+        if query = request.query
+          HTTP::Params.parse(query) do |key, value|
             params[key] ||= value
           end
         end
